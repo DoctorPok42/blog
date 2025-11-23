@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "homes",
+  "info": {
+    "singularName": "home",
+    "pluralName": "homes",
+    "displayName": "Home"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "minLength": 3
+    },
+    "description": {
+      "type": "text",
+      "minLength": 10
+    },
+    "content": {
+      "type": "dynamiczone",
+      "components": [
+        "collection.article-list",
+        "collection.featured-article"
+      ],
+      "required": true
+    }
+  }
+}

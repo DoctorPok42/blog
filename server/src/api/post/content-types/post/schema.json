@@ -36,6 +36,16 @@
       "required": true,
       "minLength": 3
     },
+    "excerpt": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "minLength": 10,
+      "required": true
+    },
     "content": {
       "type": "blocks",
       "pluginOptions": {
