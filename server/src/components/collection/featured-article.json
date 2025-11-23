@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_collection_featured_articles",
+  "info": {
+    "displayName": "featured-article"
+  },
+  "options": {},
+  "attributes": {
+    "post": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::post.post"
+    }
+  },
+  "config": {}
+}

@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_collection_article_lists",
+  "info": {
+    "displayName": "article-list"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "required": true,
+      "default": "Line-by-line",
+      "enum": [
+        "Line-by-line",
+        "Two-by-line",
+        "Grid"
+      ]
+    },
+    "maxItemCol": {
+      "type": "integer",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "type"
+            },
+            "Grid"
+          ]
+        }
+      },
+      "required": false,
+      "default": 3,
+      "min": 1
+    }
+  },
+  "config": {}
+}
