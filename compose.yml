@@ -10,5 +10,19 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_NO_ANALYTICS: "true"
+      MEILI_ENV: "development"
+
 volumes:
   pgdata: {}
