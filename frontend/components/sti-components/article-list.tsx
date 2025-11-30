@@ -21,10 +21,45 @@ const LineByLineArticleList = ({ posts }: { posts: any }) => {
     <div className="flex flex-col gap-4">
       {posts?.data?.map((post: any, index: number) => (
         <div key={index} className="p-4 border border-gray-600 rounded">
+          {post.categories && post.categories.length > 0 && (
+            <div className="w-[85%] flex gap-2">
+              {post.categories.map((category: string, categoryIndex: number) => (
+                <Link
+                  key={categoryIndex}
+                  href={`/categories/${category.slug}`}
+                >
+                  <span
+                    className="text-cyan-600 text-sm font-semibold cursor-pointer hover:underline"
+                  >
+                    {category.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
           <h2 className="text-xl font-bold line-clamp-2" title={post.title}>{post.title}</h2>
           <p className="mt-2 text-gray-500 line-clamp-4" title={post.excerpt}>{post.excerpt}</p>
-          <div className="flex justify-end">
-            <Link href={`/posts/${post.slug}`} className="text-blue-500 hover:underline mt-4 inline-block">
+          <div>
+            {post.tags && post.tags.length > 0 && (
+              <div className="w-[85%] flex mt-2 gap-2">
+                {post.tags.map((tag: string, tagIndex: number) => (
+                  <Link
+                    key={tagIndex}
+                    href={`/tags/${tag.slug}`}
+                  >
+                    <span
+                      key={tagIndex}
+                      className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded hover:bg-gray-300 cursor-pointer transition-colors duration-200"
+                    >
+                      {tag.name}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className={`flex justify-end ${post.tags && post.tags.length > 0 ? '-mt-6' : 'mt-2'}`}>
+            <Link href={`/posts/${post.slug}`} prefetch={true} className="text-blue-500 hover:underline inline-block">
               &gt; Read More
             </Link>
           </div>
