@@ -49,7 +49,7 @@ const LineByLineArticleList = ({ posts }: { posts: any }) => {
                   >
                     <span
                       key={tagIndex}
-                      className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded hover:bg-gray-300 cursor-pointer transition-colors duration-200"
+                      className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-400 cursor-pointer transition-colors duration-200"
                     >
                       {tag.name}
                     </span>
