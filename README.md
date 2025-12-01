@@ -193,16 +193,19 @@ flowchart TD
     %% ======================
 
     %% Backend
+    style Backend fill:#fff,stroke:#666,stroke-width:2px,color:#fff
     style A fill:#4945ff,stroke:#333,stroke-width:2px,color:#fff
 
     %% Frontend
-    style B fill:#b3c6ff,stroke:#333,stroke-width:2px
-    style C fill:#ffe599,stroke:#333,stroke-width:2px
-    style D fill:#b4e6b4,stroke:#333,stroke-width:2px
-    style E fill:#b4e6b4,stroke:#333,stroke-width:2px
-    style F fill:#b4e6b4,stroke:#333,stroke-width:2px
+    style Frontend fill:#fff,stroke:#666,stroke-width:2px,color:#fff
+    style B fill:#b3c6ff,stroke:#333,stroke-width:2px,color:#fff
+    style C fill:#ffe599,stroke:#333,stroke-width:2px,color:#fff
+    style D fill:#b4e6b4,stroke:#333,stroke-width:2px,color:#fff
+    style E fill:#b4e6b4,stroke:#333,stroke-width:2px,color:#fff
+    style F fill:#b4e6b4,stroke:#333,stroke-width:2px,color:#fff
 
     %% Docker Services
+    style Docker fill:#fff,stroke:#666,stroke-width:2px,color:#fff
     style Docker fill:#fafafa,stroke:#666,stroke-width:2px
     style G fill:#2f6792,stroke:#333,stroke-width:2px,color:#fff
     style H fill:#ff599c,stroke:#333,stroke-width:2px,color:#fff
