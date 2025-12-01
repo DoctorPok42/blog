@@ -142,6 +142,73 @@ export const postService = new PostService();
 - Components remain clean and focused on rendering.
 - Easy to expand with new components via Strapi dynamic zones.
 
+## Architecture Diagram
+
+```mermaid
+flowchart TD
+    %% ======================
+    %% BACKEND
+    %% ======================
+    A([Strapi CMS]) <-->|GRAPHQL| B([Next.js Frontend])
+
+    %% Dynamic components
+    B --> C@{ shape: procs, label: "StiComponentRenderer" }
+    C --> D(Component 1)
+    C --> E(Component 2)
+    C --> F(Component N)
+
+
+    %% ======================
+    %% DOCKER SERVICES
+    %% ======================
+    subgraph Docker["Docker Services"]
+        direction TB
+        G@{ shape: lin-cyl, label: "PostgreSQL" }
+        H[(Meilisearch)]
+        I[(MailHog Mail Server)]
+    end
+
+    %% Strapi depends on these services
+    A --> G
+    A --> H
+    A --> I
+
+    %% ======================
+    %% GROUPS
+    %% ======================
+    subgraph Backend
+        A
+    end
+
+    subgraph Frontend
+        B
+        C
+        D
+        E
+        F
+    end
+
+    %% ======================
+    %% STYLES
+    %% ======================
+
+    %% Backend
+    style A fill:#4945ff,stroke:#333,stroke-width:2px,color:#fff
+
+    %% Frontend
+    style B fill:#b3c6ff,stroke:#333,stroke-width:2px
+    style C fill:#ffe599,stroke:#333,stroke-width:2px
+    style D fill:#b4e6b4,stroke:#333,stroke-width:2px
+    style E fill:#b4e6b4,stroke:#333,stroke-width:2px
+    style F fill:#b4e6b4,stroke:#333,stroke-width:2px
+
+    %% Docker Services
+    style Docker fill:#fafafa,stroke:#666,stroke-width:2px
+    style G fill:#2f6792,stroke:#333,stroke-width:2px,color:#fff
+    style H fill:#ff599c,stroke:#333,stroke-width:2px,color:#fff
+    style I fill:#952225,stroke:#333,stroke-width:2px,color:#fff
+```
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
