@@ -43,5 +43,5 @@ cms-import-data data_file=default_file_name:
 # Export CMS data
 [group('cms-data')]
 [working-directory: './server']
-cms-export-data data_file=default_file_name path='./exports':
-  npx strapi export -f {{data_file}} --no-encrypt --path {{path}}
+cms-export-data data_file=default_file_name:
+  npx strapi export -f {{data_file}} --no-encrypt
