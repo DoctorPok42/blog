@@ -37,11 +37,31 @@ export interface CollectionFeaturedArticle extends Struct.ComponentSchema {
   };
 }
 
+export interface CollectionSearchBar extends Struct.ComponentSchema {
+  collectionName: 'components_collection_search_bars';
+  info: {
+    displayName: 'search-bar';
+  };
+  attributes: {
+    placeholder: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        minLength: 3;
+      }>;
+    textButton: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        minLength: 3;
+      }>;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'collection.article-list': CollectionArticleList;
       'collection.featured-article': CollectionFeaturedArticle;
+      'collection.search-bar': CollectionSearchBar;
     }
   }
 }

@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_collection_search_bars",
+  "info": {
+    "displayName": "search-bar"
+  },
+  "options": {},
+  "attributes": {
+    "placeholder": {
+      "type": "string",
+      "minLength": 3,
+      "required": true
+    },
+    "textButton": {
+      "type": "string",
+      "minLength": 3,
+      "required": true
+    }
+  },
+  "config": {}
+}

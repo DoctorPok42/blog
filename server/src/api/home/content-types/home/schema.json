@@ -23,7 +23,8 @@
       "type": "dynamiczone",
       "components": [
         "collection.article-list",
-        "collection.featured-article"
+        "collection.featured-article",
+        "collection.search-bar"
       ],
       "required": true
     }
