@@ -1,0 +1,20 @@
+meta {
+  name: nav
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{host}}/api/navigation/render/navigation
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

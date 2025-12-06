@@ -12,7 +12,7 @@ const PostId = ({ post }: { post: Post }) => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-800 font-sans dark:bg-black">
-      <div className="max-w-5xl mx-auto py-12 px-8 bg-white dark:bg-gray-800 min-h-screen">
+      <div className="max-w-6xl mx-auto py-12 px-8 bg-white dark:bg-gray-800 min-h-screen">
         <div className="w-full flex justify-center mb-8">
           <ImageSti config={{
             image: post.cover

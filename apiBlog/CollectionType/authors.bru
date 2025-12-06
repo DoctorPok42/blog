@@ -1,0 +1,20 @@
+meta {
+  name: authors
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{host}}/api/authors
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

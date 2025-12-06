@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import { StiComponentRenderer } from "../../components/sti-component-renderer";
 import { postService } from "../../services/post.service";
@@ -43,6 +42,7 @@ export async function getServerSideProps() {
     const populate = [
       "populate[content][on][collection.featured-article][populate][post][populate]=*",
       "populate[content][on][collection.article-list][populate]=*",
+      "populate[content][on][collection.search-bar]=*",
       "pagination[pageSize]=1",
     ].join("&");
 

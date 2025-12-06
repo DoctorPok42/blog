@@ -19,7 +19,7 @@ const FeaturedArticle = ({ config: {
         <button
           type="button"
           onClick={() => router.push(`/posts/${post.slug}`)}
-          className="w-full text-left bg-gray-50 dark:bg-gray-950 rounded-lg -mt-1 p-3 pt-0.5 cursor-pointer shadow-sm hover:shadow-lg dark:hover:shadow-gray-700 transition-shadow duration-200"
+          className="w-full text-left bg-gray-50 dark:bg-gray-900 rounded-lg -mt-1 p-3 pt-0.5 cursor-pointer shadow-sm hover:shadow-lg dark:hover:shadow-gray-700 transition-shadow duration-200"
         >
           <p className="mt-4 text-lg">{post?.excerpt}</p>
           <div className="flex justify-end">
