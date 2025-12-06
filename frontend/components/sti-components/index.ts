@@ -5,6 +5,7 @@ import Headin from "./heading";
 import ImageSti from "./image";
 import List from "./list";
 import { Paragraph } from "./paragraph";
+import SearchBar from "./search-bar";
 import { Text } from "./text";
 
 export const stiComponents = {
@@ -15,5 +16,6 @@ export const stiComponents = {
   heading: Headin,
   list: List,
   paragraph: Paragraph,
+  "collection.search-bar": SearchBar,
   text: Text,
 };

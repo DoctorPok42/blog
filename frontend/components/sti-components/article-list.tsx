@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Headin from "./heading";
+import { Post } from "../../models/post";
+import Author from "../common/author";
 
 enum ArticleListType {
   LINE = "Line-by-line",
@@ -13,36 +15,45 @@ interface ArticleListProps {
     type: ArticleListType;
     maxItemCol?: number;
   },
-  posts?: any;
+  posts: {
+    data: Post[];
+  }
 }
 
-const LineByLineArticleList = ({ posts }: { posts: any }) => {
+const LineByLineArticleList = ({ posts }: { posts: { data: Post[] } }) => {
   return (
     <div className="flex flex-col gap-4">
-      {posts?.data?.map((post: any, index: number) => (
-        <div key={index} className="p-4 border border-gray-600 rounded">
-          {post.categories && post.categories.length > 0 && (
-            <div className="w-[85%] flex gap-2">
-              {post.categories.map((category: string, categoryIndex: number) => (
-                <Link
-                  key={categoryIndex}
-                  href={`/categories/${category.slug}`}
-                >
-                  <span
-                    className="text-cyan-600 text-sm font-semibold cursor-pointer hover:underline"
+      {posts?.data?.map((post: Post, index: number) => (
+        <div key={index} className="p-4 border border-gray-600 rounded-lg">
+          <div className="flex gap-4">
+            {post.categories && post.categories.length > 0 && (
+              <div>
+                {post.categories.map((category: Post["categories"][0], categoryIndex: number) => (
+                  <Link
+                    key={categoryIndex}
+                    href={`/categories/${category.slug}`}
                   >
-                    {category.name}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          )}
+                    <span
+                      className="text-cyan-600 text-sm font-semibold cursor-pointer hover:underline"
+                    >
+                      {category.name}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            )}
+            {post.author && (
+              <div className="w-auto">
+                <Author author={post.author} />
+              </div>
+            )}
+          </div>
           <h2 className="text-xl font-bold line-clamp-2" title={post.title}>{post.title}</h2>
           <p className="mt-2 text-gray-500 line-clamp-4" title={post.excerpt}>{post.excerpt}</p>
           <div>
             {post.tags && post.tags.length > 0 && (
               <div className="w-[85%] flex mt-2 gap-2">
-                {post.tags.map((tag: string, tagIndex: number) => (
+                {post.tags.map((tag: Post["tags"][0], tagIndex: number) => (
                   <Link
                     key={tagIndex}
                     href={`/tags/${tag.slug}`}
@@ -108,6 +119,8 @@ const GridArticleList = ({ posts, maxItemCol }: { posts: any; maxItemCol?: numbe
 const ArticleList = ({ config: {
   title, type, maxItemCol
 }, posts }: ArticleListProps) => {
+  if (!posts || posts.data.length === 0) return null;
+
   return (
     <div>
       <Headin config={{

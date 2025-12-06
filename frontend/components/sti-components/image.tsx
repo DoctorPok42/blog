@@ -8,12 +8,18 @@ interface ImageStiProps {
       url: string;
       width: number;
       height: number;
-    }
+    },
+    width?: number;
+    height?: number;
+    clasess?: string;
   };
 }
 
 const ImageSti = ({ config: {
-    image
+    image,
+    width,
+    height,
+    clasess,
 }}: ImageStiProps) => {
   if (!image?.url) return null;
 
@@ -22,8 +28,8 @@ const ImageSti = ({ config: {
   }
 
   return (
-    <div className="text-white w-full flex justify-center my-4">
-      <Image src={image.url} alt={image.alternativeText || image.name} width={image.width} height={image.height} priority className="rounded-lg" />
+    <div className={`text-white ${clasess}`}>
+      <Image src={image.url} alt={image.alternativeText || image.name} width={width || image.width} height={height || image.height} priority className="rounded-lg" />
     </div>
   );
 };
