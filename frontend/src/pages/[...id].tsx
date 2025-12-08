@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { StiComponentRenderer } from "../../components/sti-component-renderer";
 
 interface IdProps {
@@ -5,6 +6,20 @@ interface IdProps {
 }
 
 const Id = ({ data }: IdProps) => {
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center bg-gray-800 font-sans dark:bg-black">
+        <main className="flex min-h-screen w-full max-w-6xl mx-auto flex-col items-center justify-center gap-5 py-12 px-16 bg-white dark:bg-gray-800 sm:items-start">
+          <h1 className="text-4xl font-bold text-white text-center w-full">404 - Page Not Found</h1>
+          <span className="text-lg text-gray-300 text-center w-full">The page you are looking for does not exist.</span>
+          <Link href="/" className="text-blue-500 hover:underline text-center w-full">
+            &gt; Go back to Home
+          </Link>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className={`flex items-center justify-center bg-gray-800 font-sans dark:bg-black`}>
       <main className="flex min-h-screen w-full max-w-6xl flex-col items-center gap-20 py-12 px-16 bg-white dark:bg-gray-800 sm:items-start">
