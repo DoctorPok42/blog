@@ -1,3 +1,5 @@
+"use server";
+
 export interface HeaderData {
   nav: Array<{
     label: string;
@@ -11,6 +13,7 @@ class DataService {
   private readonly STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
   async getHeaderData(): Promise<HeaderData> {
+    console.log("Fetching header data...");
     const populate = ["populate=logo", "populate[navigation][populate]=*"].join(
       "&"
     );
@@ -41,11 +44,10 @@ class DataService {
 
     data.nav = data.nav.map((item: any) => ({
       label: item.title,
-      link: item.path,
-      slug: item.path.split("=")[1],
+      link: "/" + item.path,
     }));
 
-    data.nav.unshift({ label: "Home", link: "/", slug: "" });
+    data.nav.unshift({ label: "Home", link: "/" });
 
     return data;
   }

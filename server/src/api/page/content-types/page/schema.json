@@ -35,6 +35,19 @@
       "targetField": "title",
       "required": true,
       "minLength": 3
+    },
+    "content": {
+      "type": "dynamiczone",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "components": [
+        "collection.search-bar",
+        "collection.article-list"
+      ],
+      "required": false
     }
   }
 }

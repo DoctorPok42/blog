@@ -3,7 +3,7 @@ import Headin from "./heading";
 import { Post } from "../../models/post";
 import Author from "../common/author";
 
-enum ArticleListType {
+export enum ArticleListType {
   LINE = "Line-by-line",
   TWO_COLUMN = "Two-by-line",
   GRID = "Grid",
@@ -119,8 +119,6 @@ const GridArticleList = ({ posts, maxItemCol }: { posts: any; maxItemCol?: numbe
 const ArticleList = ({ config: {
   title, type, maxItemCol
 }, posts }: ArticleListProps) => {
-  if (!posts || posts.data.length === 0) return null;
-
   return (
     <div>
       <Headin config={{
