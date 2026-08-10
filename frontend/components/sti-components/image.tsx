@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface ImageStiProps {
   config: {
@@ -16,20 +16,27 @@ interface ImageStiProps {
 }
 
 const ImageSti = ({ config: {
-    image,
-    width,
-    height,
-    clasess,
-}}: ImageStiProps) => {
-  if (!image?.url) return null;
+  image,
+  width,
+  height,
+  clasess,
+} }: ImageStiProps) => {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  if (!image.url.startsWith("http")) {
-    image.url = "http://localhost:1337" + image.url;
-  }
+  useEffect(() => {
+    if (image.url.startsWith("http")) {
+      setImageUrl(image.url);
+    } else {
+      const apiUrl = globalThis.location.origin;
+      setImageUrl(apiUrl + image.url);
+    }
+  }, [image.url]);
+
+  if (!image?.url || !imageUrl) return null;
 
   return (
-    <div className={`text-white ${clasess}`}>
-      <Image src={image.url} alt={image.alternativeText || image.name} width={width || image.width} height={height || image.height} priority className="rounded-lg" />
+    <div className={`w-full text-white ${clasess}`}>
+      <img src={imageUrl} alt={image.alternativeText || image.name} width={width || image.width} height={height || image.height} />
     </div>
   );
 };

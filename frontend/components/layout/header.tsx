@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import { HeaderData } from "../../services/data.service";
+import Image from "next/image";
+import Link from "next/link";
+import { faMoon, faSearch, faSun } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface HeaderProps {
   nav: HeaderData["nav"];
@@ -7,40 +11,46 @@ interface HeaderProps {
 
 const Header = ({ nav }: HeaderProps) => {
   const [activeLink, setActiveLink] = useState<string>("");
-  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
+  const [darkMode, setDarkMode] = useState<boolean>(false);
 
   useEffect(() => {
     const path = globalThis.location.pathname;
     setActiveLink(path);
-  }, []);
+  }, [globalThis.location?.pathname]);
 
   return (
-    <div className="bg-gray-800 font-sans dark:bg-black">
-      <div className="max-w-6xl mx-auto py-4 px-16 text-white bg-gray-500 dark:bg-gray-900 flex items-center justify-between">
-        <div className="text-2xl font-bold text-white">My Blog</div>
+    <div className="border-b border-divider">
+      <div className="max-w-[1180px] mx-auto py-3.5 px-6 flex items-center justify-between">
+        <div className="text-lg font-semibold flex gap-2 items-center">
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/logo-mark-transparent.svg" alt="Logo" width={24} height={24} />
+            My blog
+          </Link>
+        </div>
 
-        <div className="flex gap-8 items-center">
-          <nav>
-            <ul className="flex space-x-8">
-              {nav.map((item, index) => (
-                <li key={index}>
-                  <a href={item.link} className={`font-semibold text-white hover:underline ${activeLink === item.link ? 'text-yellow-300 dark:text-yellow-400' : ''}`}>
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div>
+        <div className={`flex items-center gap-4`}>
+          <div className="flex items-center gap-4">
+            <nav>
+              <ul className="flex gap-[22px] text-[14px]">
+                {nav.map((item, index) => (
+                  <li key={index + "-nav-item"}>
+                    <Link href={item.link} className={`font-semibold hover:underline ${activeLink === item.link ? 'text-[#A7A1DB]' : ''}`}>
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
 
-          <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isSearchOpen ? 'max-w-xs ml-4' : 'max-w-0'}`}>
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full p-2 rounded bg-gray-700 text-white focus:outline-none"
-            />
+          <div className={`flex items-center gap-2.5`}>
+            <Link href="/search" className="w-9 h-9 rounded-md border border-divider hover:bg-[#242634] flex items-center justify-center cursor-pointer ">
+              <FontAwesomeIcon icon={faSearch} color="#E9E9ED" className="text-[13.33px]" />
+            </Link>
+
+            <button type="button" onClick={() => setDarkMode(!darkMode)} className="w-9 h-9 rounded-md border border-divider hover:bg-[#242634] flex items-center justify-center cursor-pointer ">
+              <FontAwesomeIcon icon={darkMode ? faSun : faMoon} color="#E9E9ED" className="text-[13.33px]" />
+            </button>
           </div>
         </div>
       </div>

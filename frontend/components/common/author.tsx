@@ -21,7 +21,7 @@ const Author = ({ author }: AuthorProps) => {
         }} />
       )}
 
-      <span className="text-sm text-semibold text-gray-400">{author.name}</span>
+      <span className="text-sm text-semibold text-neutral-700">{author.name}</span>
     </div>
   );
 };

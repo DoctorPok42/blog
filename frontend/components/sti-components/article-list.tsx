@@ -1,7 +1,9 @@
-import Link from "next/link";
-import Headin from "./heading";
+import Image from "next/image";
 import { Post } from "../../models/post";
-import Author from "../common/author";
+import { useEffect, useState } from "react";
+import Button from "../common/button";
+import { faArrowAltCircleLeft, faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
+import Tag from "../common/tag";
 
 export enum ArticleListType {
   LINE = "Line-by-line",
@@ -15,100 +17,83 @@ interface ArticleListProps {
     type: ArticleListType;
     maxItemCol?: number;
   },
-  posts: {
-    data: Post[];
-  }
 }
 
-const LineByLineArticleList = ({ posts }: { posts: { data: Post[] } }) => {
+export const LineByLineArticleList = ({ posts }: { posts: Post[] }) => {
   return (
-    <div className="flex flex-col gap-4">
-      {posts?.data?.map((post: Post, index: number) => (
-        <div key={index} className="p-4 border border-gray-600 rounded-lg">
-          <div className="flex gap-4">
-            {post.categories && post.categories.length > 0 && (
-              <div>
-                {post.categories.map((category: Post["categories"][0], categoryIndex: number) => (
-                  <Link
-                    key={categoryIndex}
-                    href={`/categories/${category.slug}`}
-                  >
-                    <span
-                      className="text-cyan-600 text-sm font-semibold cursor-pointer hover:underline"
-                    >
-                      {category.name}
-                    </span>
-                  </Link>
-                ))}
-              </div>
+    <div className="flex flex-col gap-3.5">
+      {posts?.map((post: Post, index: number) => (
+        <div
+          key={index + "-post"}
+          className="py-[18px] px-5 border border-divider rounded-md duration-200 cursor-pointer"
+        >
+          <div className="flex gap-3 items-center justify-between mb-1.5">
+            {post.category && (
+              <span
+                className="text-accent text-[10px] font-light tracking-widest cursor-pointer uppercase"
+              >
+                {post.category.name}
+              </span>
             )}
-            {post.author && (
-              <div className="w-auto">
-                <Author author={post.author} />
-              </div>
-            )}
+
+            <span className="text-[11px] text-neutral-500">
+              {post.author.name} · {new Date(post.updatedAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+              })} · {post.minReadTime} min
+            </span>
           </div>
-          <h2 className="text-xl font-bold line-clamp-2" title={post.title}>{post.title}</h2>
-          <p className="mt-2 text-gray-500 line-clamp-4" title={post.excerpt}>{post.excerpt}</p>
-          <div>
-            {post.tags && post.tags.length > 0 && (
-              <div className="w-[85%] flex mt-2 gap-2">
-                {post.tags.map((tag: Post["tags"][0], tagIndex: number) => (
-                  <Link
-                    key={tagIndex}
-                    href={`/tags/${tag.slug}`}
-                  >
-                    <span
-                      key={tagIndex}
-                      className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-400 cursor-pointer transition-colors duration-200"
-                    >
-                      {tag.name}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className={`flex justify-end ${post.tags && post.tags.length > 0 ? '-mt-6' : 'mt-2'}`}>
-            <Link href={`/posts/${post.slug}`} prefetch={true} className="text-blue-500 hover:underline inline-block">
-              &gt; Read More
-            </Link>
-          </div>
+
+          <h3 className="font-heading font-medium text-[19px] mb-1.5 line-clamp-2" title={post.title}>{post.title}</h3>
+          <p className="mt-0 opacity-80 text-[13px] line-clamp-3">{post.excerpt}</p>
         </div>
       ))}
     </div>
   );
 }
 
-const TwoByColumnArticleList = ({ posts }: { posts: any }) => {
+export const TwoByColumnArticleList = ({ posts }: { posts: any }) => {
   return (
     <div className="grid grid-cols-2 gap-4">
-      {posts?.data?.map((post: any, index: number) => (
-        <div key={index} className="p-4 border border-gray-600 rounded">
-          <h2 className="text-xl font-bold line-clamp-2" title={post.title}>{post.title}</h2>
-          <p className="mt-2 text-gray-500 line-clamp-3" title={post.excerpt}>{post.excerpt}</p>
-          <div className="flex justify-end">
-            <Link href={`/posts/${post.slug}`} className="text-blue-500 hover:underline mt-4 inline-block">
-              &gt; Read More
-            </Link>
-          </div>
+      {posts?.map((post: any, index: number) => (
+        <div key={index + "-post"} className="col-span-1">
+          <LineByLineArticleList posts={post} />
         </div>
       ))}
     </div>
   );
 }
 
-const GridArticleList = ({ posts, maxItemCol }: { posts: any; maxItemCol?: number }) => {
+export const GridArticleList = ({ posts, maxItemCol }: { posts: any; maxItemCol?: number }) => {
   return (
-    <div className={`grid grid-cols-${maxItemCol || 3} gap-4`}>
-      {posts?.data?.map((post: any, index: number) => (
-        <div key={index} className="p-4 border border-gray-600 rounded">
-          <h2 className="text-xl font-bold line-clamp-2" title={post.title}>{post.title}</h2>
-          <p className="mt-2 text-gray-500 line-clamp-3" title={post.excerpt}>{post.excerpt}</p>
-          <div className="flex justify-end">
-            <Link href={`/posts/${post.slug}`} className="text-blue-500 hover:underline mt-4 inline-block">
-              &gt; Read More
-            </Link>
+    <div className={`grid grid-cols-3 gap-4`}>
+      {posts?.map((post: any, index: number) => (
+        <div key={index + "-post"} className="w-full flex flex-col border border-divider bg-surface rounded-md cursor-pointer">
+          <div className="w-full bg-[#2a2c38] rounded-t-md overflow-hidden">
+            <Image src={post.coverImage} alt={post.title} width={364} height={243} className="object-cover rounded-md" />
+          </div>
+          <div className="p-[18px]">
+            <div className="flex gap-3 items-center justify-between">
+              {post.category && (
+                <span
+                  className="text-accent text-[10px] font-light tracking-widest cursor-pointer uppercase"
+                >
+                  {post.category.name}
+                </span>
+              )}
+            </div>
+
+            <h3 className="font-heading font-medium text-[17px] mt-1.5 mb-2 leading-[1.2] line-clamp-2" title={post.title}>{post.title}</h3>
+            <p className="mt-0 opacity-80 text-[13px] line-clamp-3">{post.excerpt}</p>
+
+            <span className="flex justify-between text-[11px] text-neutral-500 mt-3.5">
+              {post.author.name} · {new Date(post.updatedAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+              })} <span>{post.minReadTime} min</span>
+            </span>
           </div>
         </div>
       ))}
@@ -117,21 +102,90 @@ const GridArticleList = ({ posts, maxItemCol }: { posts: any; maxItemCol?: numbe
 }
 
 const ArticleList = ({ config: {
-  title, type, maxItemCol
-}, posts }: ArticleListProps) => {
-  return (
-    <div>
-      <Headin config={{
-        level: 1,
-        children: [{ type: "text", text: title }]
-      }}
-      />
+  title, type, maxItemCol } }: ArticleListProps) => {
+  const [postsData, setPostsData] = useState<{ data: Post[]; meta: { pagination: { page: number; pageCount: number; total: number } } }>({ data: [], meta: { pagination: { page: 1, pageCount: 1, total: 0 } } });
+  const [categories, setCategories] = useState<{ name: string, slug: string }[]>([]);
+  const [category, setCategory] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [pageCount, setPageCount] = useState<number>(12);
+  const [loading, setLoading] = useState<boolean>(true);
 
-      <div className="mt-6">
-        {type === ArticleListType.LINE && <LineByLineArticleList posts={posts} />}
-        {type === ArticleListType.TWO_COLUMN && <TwoByColumnArticleList posts={posts} />}
-        {type === ArticleListType.GRID && <GridArticleList posts={posts} maxItemCol={maxItemCol} />}
-      </div>
+  const fetchPage = async (targetPage: number) => {
+    setLoading(true);
+    try {
+      const postRes = await fetch(`/api/posts?page=${targetPage}&pageSize=12&category=${encodeURIComponent(category)}`);
+      const categoryRes = await fetch(`/api/categories`);
+      const categoryJson = await categoryRes.json();
+      setCategories([{ name: "All", slug: "" }, ...categoryJson.data.map((cat: any) => ({ name: cat.name, slug: cat.slug }))]);
+      const json = await postRes.json();
+      setPostsData(json);
+      setPage(json.meta.pagination.page);
+      setPageCount(json.meta.pagination.pageCount);
+    } catch (err) {
+      console.error("Failed to fetch page", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPage(page);
+  }, [page]);
+
+  useEffect(() => {
+    if (category) {
+      fetchPage(1);
+    }
+  }, [category]);
+
+  return (
+    <div className="w-full pt-8 pb-20 sm:px-4">
+      <h1 className="text-[42px] font-medium mb-2.5">{title}</h1>
+      {postsData?.data?.length === 0 && !loading && <p className="text-neutral-500 mb-7">No posts available.</p>}
+      {postsData?.data?.length > 0 && <p className="text-neutral-500 mb-7">{postsData?.meta?.pagination.total} post{postsData?.meta?.pagination.total !== 1 ? "s" : ""}</p>}
+
+      {categories.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-7">
+          {categories.map((cat: { name: string, slug: string }) => (
+            <button
+              type="button"
+              key={cat.slug}
+              className="cursor-pointer"
+              onClick={() => {
+                setCategory(cat.slug);
+                setPage(1);
+              }}
+            >
+              <Tag
+                text={cat.name}
+                variant={cat.slug === category ? "accent" : "neutral"}
+              />
+            </button>
+          ))}
+        </div>
+      )}
+
+      {type === ArticleListType.LINE && <LineByLineArticleList posts={postsData?.data} />}
+      {type === ArticleListType.TWO_COLUMN && <TwoByColumnArticleList posts={postsData?.data} />}
+      {type === ArticleListType.GRID && <GridArticleList posts={postsData?.data} maxItemCol={maxItemCol} />}
+
+      {pageCount > 1 && !loading && <div className="flex justify-center mt- gap-4">
+        <Button
+          text="Previous"
+          onClick={() => fetchPage(page - 1)}
+          disabled={page <= 1 || loading}
+          icon={faArrowAltCircleLeft}
+        />
+
+        <span className="text-sm self-center">{page} / {pageCount}</span>
+        <Button
+          onClick={() => fetchPage(page + 1)}
+          disabled={page >= pageCount || loading}
+          text="Next"
+          icon={faArrowAltCircleRight}
+          iconPosition="right"
+        />
+      </div>}
     </div>
   );
 };

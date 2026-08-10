@@ -1,4 +1,6 @@
 import { StiComponentRenderer } from "../sti-component-renderer";
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 interface CodeProps {
   config: {
@@ -11,13 +13,23 @@ const Code = ({ config: {
   language, children
 }}: CodeProps) => {
   const content = children.map((child: { type: string }, index: any) => (
-    <StiComponentRenderer key={index} type={child.type} config={child} />
+    <StiComponentRenderer key={index + "-code"} type={child.type} config={child} />
   ));
 
   return (
-    <pre className="w-full mt-2 p-4 bg-gray-200 dark:bg-gray-900 rounded-lg overflow-x-auto">
-      {content}
-    </pre>
+    <SyntaxHighlighter
+      language={language}
+      style={atomOneDark}
+      customStyle={{
+        borderRadius: 12,
+        padding: 16,
+        marginTop: "-30px",
+        marginBottom: "-30px",
+        border: "1px solid #505050",
+      }}
+    >
+      {content.map((item: any) => item.props.config.text)}
+    </SyntaxHighlighter>
   );
 };
 
