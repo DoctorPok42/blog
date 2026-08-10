@@ -149,7 +149,7 @@ const PostId = ({ post }: { post: Post }) => {
         {post.relatedPosts?.length > 0 && (
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-4">Related Posts</h2>
-            <GridArticleList posts={{ data: post.relatedPosts }} maxItemCol={2} />
+            <GridArticleList posts={post.relatedPosts} maxItemCol={2} />
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Button from "../common/button";
 import { faArrowAltCircleLeft, faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
 import Tag from "../common/tag";
+import Link from "next/link";
 
 export enum ArticleListType {
   LINE = "Line-by-line",
@@ -25,8 +26,9 @@ export const LineByLineArticleList = ({ posts }: { posts: Post[] }) => {
       {posts?.map((post: Post, index: number) => (
         <div
           key={index + "-post"}
-          className="py-[18px] px-5 border border-divider rounded-md duration-200 cursor-pointer"
+          className="py-[18px] px-5 border border-divider rounded-md duration-200 cursor-pointer relative"
         >
+          <Link href={`/posts/${post.slug}`} className="absolute inset-0 z-10" />
           <div className="flex gap-3 items-center justify-between mb-1.5">
             {post.category && (
               <span
@@ -69,7 +71,8 @@ export const GridArticleList = ({ posts, maxItemCol }: { posts: any; maxItemCol?
   return (
     <div className={`grid grid-cols-3 gap-4`}>
       {posts?.map((post: any, index: number) => (
-        <div key={index + "-post"} className="w-full flex flex-col border border-divider bg-surface rounded-md cursor-pointer">
+        <div key={index + "-post"} className="w-full flex flex-col border border-divider bg-surface rounded-md cursor-pointer relative">
+          <Link href={`/posts/${post.slug}`} className="absolute inset-0 z-10" />
           <div className="w-full bg-[#2a2c38] rounded-t-md overflow-hidden">
             <Image src={post.coverImage} alt={post.title} width={364} height={243} className="object-cover rounded-md" />
           </div>
