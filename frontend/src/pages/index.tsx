@@ -1,31 +1,18 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import { StiComponentRenderer } from "../../components/sti-component-renderer";
-import { postService } from "../../services/post.service";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 interface HomeProps {
   home: any;
-  posts: any;
 }
 
-export default function Home({ home, posts }: Readonly<HomeProps>) {
+export default function Home({ home }: Readonly<HomeProps>) {
   return (
     <div
-      className={`${geistSans.className} ${geistMono.className} flex min-h-screen items-center justify-center bg-gray-800 font-sans dark:bg-black`}
+      className={`flex items-center justify-center`}
     >
-      <main className="flex min-h-screen w-full max-w-6xl flex-col items-center gap-20 py-12 px-16 bg-white dark:bg-gray-800 sm:items-start">
-        <div className="w-full space-y-16">
+      <main className="flex w-full max-w-[1180px] flex-col items-center gap-20 px-16 sm:items-start">
+        <div className="w-full">
           {home.content.map((component: { __component: string }, index: number) => (
-            <StiComponentRenderer key={index} type={component.__component} config={component} posts={posts} />
+            <StiComponentRenderer key={index + "-component"} type={component.__component} config={component} />
           ))}
         </div>
       </main>
@@ -33,9 +20,8 @@ export default function Home({ home, posts }: Readonly<HomeProps>) {
   );
 }
 
-
 export async function getServerSideProps() {
-  const API_URL = process.env.API_URL || "http://localhost:1337";
+  const API_URL = process.env.API_URL || "http://strapi:1337";
   const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
   const getHomePage = async () => {
@@ -56,9 +42,8 @@ export async function getServerSideProps() {
   }
 
   const homePageData = await getHomePage().then(data => data.data[0]);
-  const postsData = await postService.getPosts();
 
   return {
-    props: { home: homePageData, posts: postsData },
+    props: { home: homePageData },
   }
 }
