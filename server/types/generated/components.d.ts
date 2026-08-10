@@ -37,6 +37,19 @@ export interface CollectionFeaturedArticle extends Struct.ComponentSchema {
   };
 }
 
+export interface CollectionLatestArticles extends Struct.ComponentSchema {
+  collectionName: 'components_collection_latest_articles';
+  info: {
+    displayName: 'latest-articles';
+  };
+  attributes: {
+    number: Schema.Attribute.Integer;
+    type: Schema.Attribute.Enumeration<['List', 'Grid']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Grid'>;
+  };
+}
+
 export interface CollectionSearchBar extends Struct.ComponentSchema {
   collectionName: 'components_collection_search_bars';
   info: {
@@ -56,12 +69,24 @@ export interface CollectionSearchBar extends Struct.ComponentSchema {
   };
 }
 
+export interface TextSimpleText extends Struct.ComponentSchema {
+  collectionName: 'components_text_simple_texts';
+  info: {
+    displayName: 'simple-text';
+  };
+  attributes: {
+    text: Schema.Attribute.Blocks & Schema.Attribute.Required;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'collection.article-list': CollectionArticleList;
       'collection.featured-article': CollectionFeaturedArticle;
+      'collection.latest-articles': CollectionLatestArticles;
       'collection.search-bar': CollectionSearchBar;
+      'text.simple-text': TextSimpleText;
     }
   }
 }

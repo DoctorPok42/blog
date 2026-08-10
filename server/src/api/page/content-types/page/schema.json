@@ -45,7 +45,9 @@
       },
       "components": [
         "collection.search-bar",
-        "collection.article-list"
+        "collection.article-list",
+        "collection.latest-articles",
+        "text.simple-text"
       ],
       "required": false
     }

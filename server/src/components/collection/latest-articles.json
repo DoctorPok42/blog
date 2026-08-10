@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_collection_latest_articles",
+  "info": {
+    "displayName": "latest-articles"
+  },
+  "options": {},
+  "attributes": {
+    "number": {
+      "type": "integer"
+    },
+    "type": {
+      "type": "enumeration",
+      "required": true,
+      "default": "Grid",
+      "enum": [
+        "List",
+        "Grid"
+      ]
+    }
+  },
+  "config": {}
+}

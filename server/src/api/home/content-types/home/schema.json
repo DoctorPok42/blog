@@ -24,7 +24,9 @@
       "components": [
         "collection.article-list",
         "collection.featured-article",
-        "collection.search-bar"
+        "collection.search-bar",
+        "collection.latest-articles",
+        "text.simple-text"
       ],
       "required": true
     }
