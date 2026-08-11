@@ -6,14 +6,6 @@ export interface CollectionArticleList extends Struct.ComponentSchema {
     displayName: 'article-list';
   };
   attributes: {
-    maxItemCol: Schema.Attribute.Integer &
-      Schema.Attribute.SetMinMax<
-        {
-          min: 1;
-        },
-        number
-      > &
-      Schema.Attribute.DefaultTo<3>;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
@@ -43,7 +35,9 @@ export interface CollectionLatestArticles extends Struct.ComponentSchema {
     displayName: 'latest-articles';
   };
   attributes: {
-    number: Schema.Attribute.Integer;
+    number: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<6>;
     type: Schema.Attribute.Enumeration<['List', 'Grid']> &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Grid'>;

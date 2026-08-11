@@ -16,15 +16,15 @@ const FeaturedArticle = ({ config: {
   if (!post) return null;
   return (
     <div className="mt-10 flex gap-10 items-center justify-start relative">
-      <div className="w-1/2 flex flex-col justify-center items-start">
+      <div className="w-[520px] flex flex-col justify-center items-start">
         <Tag
           text="Featured"
           variant="outline"
           divClass="mb-[16px]"
         />
 
-        <h1 className="text-[clamp(28px,4vw,44px)] font-heading font-bold mb-3.5 leading-[1.08] text-white">{post?.title}</h1>
-        <p className="max-w-[52ch] text-[16px] mb-[22px] opacity-80">{post?.excerpt}</p>
+        <h1 className="text-[clamp(28px,4vw,44px)] font-heading font-medium mb-3.5 leading-[1.08] text-white">{post?.title}</h1>
+        <p className="max-w-[52ch] text-[16px] mb-[22px] font-medium opacity-80">{post?.excerpt}</p>
 
         <div className="flex items-center gap-3.5 mb-6 text-[13px] text-neutral-500">
           <div className="flex items-center gap-2">
@@ -52,10 +52,10 @@ const FeaturedArticle = ({ config: {
         />
       </div>
 
-      <div className="w-1/2 h-[429px] rounded-lg overflow-hidden">
+      <div className="w-[572px] rounded-lg overflow-hidden">
         <ImageSti config={{
           image: post?.cover,
-          clasess: "w-full h-full object-cover rounded-[14px]",
+          clasess: "w-full h-full object-cover rounded-[14px] aspect-[4/3] overflow-hidden",
         }} />
       </div>
     </div>

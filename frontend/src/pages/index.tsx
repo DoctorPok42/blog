@@ -9,7 +9,7 @@ export default function Home({ home }: Readonly<HomeProps>) {
     <div
       className={`flex items-center justify-center`}
     >
-      <main className="flex w-full max-w-[1180px] flex-col items-center gap-20 px-16 sm:items-start">
+      <main className="flex w-full max-w-[1180px] flex-col items-center gap-20 px-6 pb-20 sm:items-start">
         <div className="w-full">
           {home.content.map((component: { __component: string }, index: number) => (
             <StiComponentRenderer key={index + "-component"} type={component.__component} config={component} />
@@ -29,6 +29,7 @@ export async function getServerSideProps() {
       "populate[content][on][collection.featured-article][populate][post][populate]=*",
       "populate[content][on][collection.article-list][populate]=*",
       "populate[content][on][collection.search-bar]=*",
+      "populate[content][on][collection.latest-articles][populate]=*",
       "pagination[pageSize]=1",
     ].join("&");
 

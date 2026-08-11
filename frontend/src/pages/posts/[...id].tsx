@@ -7,6 +7,10 @@ import { Post } from "../../../models/post";
 import { GridArticleList } from "../../../components/sti-components/article-list";
 import { useEffect, useState } from "react";
 import Button from "../../../components/common/button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
+import Tag from "../../../components/common/tag";
+import Author from "../../../components/common/author";
 
 const extractText = (node: any): string => {
   if (typeof node === "string") return node;
@@ -29,7 +33,7 @@ const extractHeadings = (content: any[]): Array<{ text: string; id: string }> =>
   return content
     .filter((item) => item.type === "heading" && item.level === 2)
     .map((item) => {
-      const text = extractText(item.children[0].text);
+      const text = extractText(item.children[0].text).replaceAll(/[?!.:]/g, "").trim();
       return { text, id: textToSlug(text) };
     });
 };
@@ -39,7 +43,7 @@ const addIdsToContent = (content: any[]): any[] => {
 
   return content.map((item) => {
     if (item.type === "heading" && item.level === 2) {
-      const text = extractText(item.children[0].text);
+      const text = extractText(item.children[0].text)
       const slug = textToSlug(text);
       const count = (headingCount.get(slug) || 0) + 1;
       headingCount.set(slug, count);
@@ -57,6 +61,7 @@ const addIdsToContent = (content: any[]): any[] => {
 
 const PostId = ({ post }: { post: Post }) => {
   const [headings, setHeadings] = useState<Array<{ text: string; id: string }>>([]);
+  const [headingSelected, setHeadingSelected] = useState<string | null>(null);
 
   useEffect(() => {
     if (post?.content) {
@@ -64,6 +69,15 @@ const PostId = ({ post }: { post: Post }) => {
       setHeadings(extractedHeadings);
     }
   }, [post]);
+
+  useEffect(() => {
+    if (!headingSelected) {
+      const hash = window.location.hash.substring(1);
+      if (hash) {
+        setHeadingSelected(hash);
+      }
+    }
+  }, [headingSelected]);
 
   const contentWithIds = post?.content ? addIdsToContent(post.content) : [];
 
@@ -92,23 +106,51 @@ const PostId = ({ post }: { post: Post }) => {
   }
 
   return (
-    <div className="relative flex justify-center">
-      <div className="max-w-250 ml-80 pb-12 px-8 min-h-screen">
-        <span className="text-cyan-700 text-sm font-semibold cursor-pointer hover:underline mb-2 inline-block"><Link href="/">Go back</Link></span>
-        <h1 className="text-5xl font-bold">{post.title}</h1>
+    <div className="max-w-[1180px] mx-auto px-6 pt-8 pb-20 relative flex justify-center gap-12">
+      <div className="pb-12 min-h-screen">
+        <Tag
+          text={post.category.name}
+          divClass="inline-flex mb-[14px]"
+        />
 
-        <div className="flex gap-4 mt-2 mb-4">
-          <span className="text-gray-500 dark:text-gray-400">{new Date(post.updatedAt).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "2-digit"
-          })}</span>
-          <span className="text-gray-500 dark:text-gray-400 border-dashed border-b-2">{post.minReadTime} minute{post.minReadTime === 1 ? '' : 's'} read</span>
+        <h1 className="text-5xl font-medium mb-4">{post.title}</h1>
+
+        <div className="flex items-center justify-between gap-3.5 pb-6 mb-7 border-b border-divider">
+          <div className="flex gap-2.5 items-center">
+            <div className="w-[34px] h-[34px] rounded-full bg-accent-800 flex items-center justify-center text-[13px] text-accent-100">
+              <span>{post.author.name.split(" ").map((n) => n[0]).join("")}</span>
+            </div>
+
+            <div>
+              <span className="text-[#E9E9ED] font-medium text-[14px]">{post.author.name}</span>
+
+              <div className="flex gap-1 text-[12px] text-neutral-500">
+                <span>{new Date(post.updatedAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "2-digit"
+                })}</span>
+                <span>·</span>
+                <span>{post.minReadTime} min read</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-1.5">
+            {post.tags.map((tag: Post["tags"][0], tagIndex: number) => (
+              <Tag
+                key={tagIndex + "-tag"}
+                text={tag.name}
+                variant="outline"
+              />
+            ))}
+          </div>
         </div>
 
         <div className="w-full flex justify-center mb-8">
           <ImageSti config={{
-            image: post.cover
+            image: post.cover,
+            clasess: "w-full object-cover rounded-lg aspect-[16/8] overflow-hidden",
           }} />
         </div>
 
@@ -116,63 +158,51 @@ const PostId = ({ post }: { post: Post }) => {
           <StiComponentRenderer key={index + "-content"} type={child.type} config={child} />
         ))}
 
-        {post.category && (
-          <div className="w-full flex justify-between mt-10 mb-2">
-            <div className="max-w-[30%] flex gap-2">
-              <Link
-                href={`/categories/${post.category.slug}`}
-              >
-                <span
-                  className="text-cyan-600 text-2sm font-semibold cursor-pointer hover:underline"
-                  title={post.category.name}
-                >
-                  {post.category.name}
-                </span>
-              </Link>
+        {post.relatedPosts?.length > 0 && (
+          <div className="mt-14">
+            <h2 className="text-[32px] font-medium mb-5">Related articles</h2>
+
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
+              {post.relatedPosts?.map((relatedPost: Post["relatedPosts"][0], index: number) => (
+                <div key={index + "-related-post"} className="relative flex flex-col gap-0.5 bg-surface border border-divider rounded-md p-4 mb-4 cursor-pointer">
+                  <Link href={`/posts/${relatedPost.slug}`} className="absolute inset-0 z-10" />
+                  {relatedPost.category && <div className="text-accent text-[10px] font-light tracking-widest cursor-pointer uppercase">
+                    {relatedPost.category.name}
+                  </div>}
+
+                  <h3 className="font-heading font-medium text-[15px] mt-1.5 line-clamp-2" title={relatedPost.title}>
+                    {relatedPost.title}
+                  </h3>
+
+                  {relatedPost.minReadTime && <div className="text-[11px] text-neutral-500">
+                    {relatedPost.minReadTime} min
+                  </div>}
+                </div>
+              ))}
             </div>
           </div>
         )}
-        {post.tags && post.tags.length > 0 && (
-          <div className="flex mb-2 gap-2">
-            {post.tags.map((tag: Post["tags"][0], tagIndex: number) => (
-              <Link key={tagIndex + "-tag"} href={`/tags/${tag.slug}`}>
-                <span
-                  className="inline-block bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded hover:bg-gray-300 cursor-pointer transition-colors duration-200"
-                >
-                  {tag.name}
-                </span>
-              </Link>
-            ))}
-          </div>
-        )}
-
-        {post.relatedPosts?.length > 0 && (
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold mb-4">Related Posts</h2>
-            <GridArticleList posts={post.relatedPosts} maxItemCol={2} />
-          </div>
-        )}
       </div>
 
-      <div className="sticky top-35 ml-5 hidden lg:block w-75 h-fit border-l border-gray-300 dark:border-gray-600 pl-5">
-        <span className="text-gray-500 dark:text-gray-400 text-[16px] font-semibold block mb-3">On this page</span>
-        {headings.length > 0 ? (
-          <nav className="space-y-2">
-            {headings.map((heading, index) => (
-              <a
-                key={index + "-heading-link"}
-                href={`#${heading.id}`}
-                className="w-fit block text-gray-600 dark:text-gray-400 text-sm hover:underline hover:text-gray-800 dark:hover:text-gray-200 transition-colors duration-200 truncate"
-                title={heading.text}
-              >
-                {heading.text}
-              </a>
-            ))}
-          </nav>
-        ) : (
-          <p className="text-gray-500 dark:text-gray-400 text-xs">No headings found</p>
-        )}
-      </div>
+      {headings.length > 0 && <div className="sticky top-5 mt-[70px] hidden lg:block h-fit">
+        <span className="flex gap-1.5 items-center text-neutral-500 text-[11px] uppercase font-semibold mb-3 tracking-[0.08em]">
+          <FontAwesomeIcon icon={faBarsStaggered} className="-ml-0.5" />
+          Contents
+        </span>
+        <nav className="flex flex-col gap-2.5 border-l border-divider pl-3.5">
+          {headings.map((heading, index) => (
+            <a
+              key={index + "-heading-link"}
+              href={`#${heading.id}`}
+              className={`w-fit block text-neutral-500 dark:text-gray-400 text-[13px] hover:underline hover:text-gray-800 dark:hover:text-gray-200 transition-colors duration-200 truncate ${headingSelected === heading.id ? "text-accent!" : ""}`}
+              title={heading.text}
+              onClick={() => setHeadingSelected(heading.id)}
+            >
+              {heading.text}
+            </a>
+          ))}
+        </nav>
+      </div>}
     </div>
   );
 }

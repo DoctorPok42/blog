@@ -35,8 +35,8 @@ const ImageSti = ({ config: {
   if (!image?.url || !imageUrl) return null;
 
   return (
-    <div className={`w-full text-white ${clasess}`}>
-      <img src={imageUrl} alt={image.alternativeText || image.name} width={width || image.width} height={height || image.height} />
+    <div className={`w-full text-white `}>
+      <img src={imageUrl} alt={image.alternativeText || image.name} className={`${clasess}`} />
     </div>
   );
 };

@@ -29,6 +29,7 @@ export type Post = {
     id: number;
     title: string;
     slug: string;
-    cover: ImagePost;
+    category: { name: string; slug: string };
+    minReadTime: number;
   }>;
 };

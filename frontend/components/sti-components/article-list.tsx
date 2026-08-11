@@ -1,10 +1,10 @@
-import Image from "next/image";
 import { Post } from "../../models/post";
 import { useEffect, useState } from "react";
 import Button from "../common/button";
 import { faArrowAltCircleLeft, faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
 import Tag from "../common/tag";
 import Link from "next/link";
+import ImageSti from "./image";
 
 export enum ArticleListType {
   LINE = "Line-by-line",
@@ -55,32 +55,35 @@ export const LineByLineArticleList = ({ posts }: { posts: Post[] }) => {
   );
 }
 
-export const TwoByColumnArticleList = ({ posts }: { posts: any }) => {
+export const TwoByColumnArticleList = ({ posts }: { posts: Post[] }) => {
   return (
     <div className="grid grid-cols-2 gap-4">
-      {posts?.map((post: any, index: number) => (
+      {posts?.map((post: Post, index: number) => (
         <div key={index + "-post"} className="col-span-1">
-          <LineByLineArticleList posts={post} />
+          <LineByLineArticleList posts={[post]} />
         </div>
       ))}
     </div>
   );
 }
 
-export const GridArticleList = ({ posts, maxItemCol }: { posts: any; maxItemCol?: number }) => {
+export const GridArticleList = ({ posts }: { posts: Post[] }) => {
   return (
-    <div className={`grid grid-cols-3 gap-4`}>
-      {posts?.map((post: any, index: number) => (
+    <div className={`grid grid-cols-[repeat(auto-fit,minmax(${posts?.length > 0 ? "220px" : "1fr"},1fr))] gap-4`}>
+      {posts?.map((post: Post, index: number) => (
         <div key={index + "-post"} className="w-full flex flex-col border border-divider bg-surface rounded-md cursor-pointer relative">
           <Link href={`/posts/${post.slug}`} className="absolute inset-0 z-10" />
-          <div className="w-full bg-[#2a2c38] rounded-t-md overflow-hidden">
-            <Image src={post.coverImage} alt={post.title} width={364} height={243} className="object-cover rounded-md" />
+          <div className="w-full h-full bg-[#2a2c38] rounded-t-md overflow-hidden">
+            <ImageSti config={{
+              image: post.cover,
+              clasess: "object-cover rounded-t-md aspect-[16/10] overflow-hidden",
+            }} />
           </div>
           <div className="p-[18px]">
             <div className="flex gap-3 items-center justify-between">
               {post.category && (
                 <span
-                  className="text-accent text-[10px] font-light tracking-widest cursor-pointer uppercase"
+                  className="text-accent text-[10px] tracking-widest cursor-pointer uppercase"
                 >
                   {post.category.name}
                 </span>
@@ -136,16 +139,14 @@ const ArticleList = ({ config: {
   }, [page]);
 
   useEffect(() => {
-    if (category) {
-      fetchPage(1);
-    }
+    fetchPage(1);
   }, [category]);
 
   return (
     <div className="w-full pt-8 pb-20 sm:px-4">
       <h1 className="text-[42px] font-medium mb-2.5">{title}</h1>
       {postsData?.data?.length === 0 && !loading && <p className="text-neutral-500 mb-7">No posts available.</p>}
-      {postsData?.data?.length > 0 && <p className="text-neutral-500 mb-7">{postsData?.meta?.pagination.total} post{postsData?.meta?.pagination.total !== 1 ? "s" : ""}</p>}
+      {postsData?.data?.length > 0 && <p className="text-neutral-500 mb-7">{postsData?.meta?.pagination.total} post{postsData?.meta?.pagination.total !== 1 ? "s" : ""}{category && ` — ${categories.find((e) => e.slug === category)?.name}`}</p>}
 
       {categories.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-7">
@@ -170,7 +171,7 @@ const ArticleList = ({ config: {
 
       {type === ArticleListType.LINE && <LineByLineArticleList posts={postsData?.data} />}
       {type === ArticleListType.TWO_COLUMN && <TwoByColumnArticleList posts={postsData?.data} />}
-      {type === ArticleListType.GRID && <GridArticleList posts={postsData?.data} maxItemCol={maxItemCol} />}
+      {type === ArticleListType.GRID && <GridArticleList posts={postsData?.data} />}
 
       {pageCount > 1 && !loading && <div className="flex justify-center mt- gap-4">
         <Button

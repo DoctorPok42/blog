@@ -41,11 +41,27 @@ class DataService {
   async getPosts(
     pageSize: number = 12,
     page: number = 1,
-    category?: string
+    category?: string,
+    sort?: string,
+    filters?: Record<string, Record<string, string>>
   ): Promise<any> {
-    let url = `${this.API_URL}/api/posts?populate=*&pagination[pageSize]=${pageSize}&pagination[page]=${page}`;
+    const populate = [
+      "populate[category][populate]=*",
+      "populate[author][populate]=*",
+      "populate[cover][populate]=*",
+    ].join("&");
+
+    let url = `${this.API_URL}/api/posts?${populate}&pagination[pageSize]=${pageSize}&pagination[page]=${page}`;
     if (category) {
       url += `&filters[category][slug][$eq]=${category}`;
+    }
+    if (sort) {
+      url += `&sort=${sort}`;
+    }
+    if (filters) {
+      for (const [key, value] of Object.entries(filters)) {
+        url += `&filters[${key}][${Object.keys(value)[0]}]=${Object.values(value)[0]}`;
+      }
     }
 
     const resPosts = await fetch(url, {

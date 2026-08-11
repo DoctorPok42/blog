@@ -15,7 +15,7 @@ const Tag = ({
   text, title, variant = 'accent', divClass
 }: TagProps) => {
   return (
-    <div title={title} className={`flex items-center justify-center text-[11px] py-[3px] tracking-[0.02em] px-2.5 rounded-[6px] transition duration-300 ${colorClass[variant] || colorClass.accent} ${divClass}`}>
+    <div title={title} className={`flex items-center justify-center text-[11px] py-[3px] tracking-[0.02em] px-2.5 rounded-[6px] transition duration-200 ${colorClass[variant] || colorClass.accent} ${divClass}`}>
       {text && <span>{text}</span>}
     </div>
   );

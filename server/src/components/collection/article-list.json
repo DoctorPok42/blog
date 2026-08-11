@@ -19,22 +19,6 @@
         "Two-by-line",
         "Grid"
       ]
-    },
-    "maxItemCol": {
-      "type": "integer",
-      "conditions": {
-        "visible": {
-          "==": [
-            {
-              "var": "type"
-            },
-            "Grid"
-          ]
-        }
-      },
-      "required": false,
-      "default": 3,
-      "min": 1
     }
   },
   "config": {}

@@ -6,7 +6,9 @@
   "options": {},
   "attributes": {
     "number": {
-      "type": "integer"
+      "type": "integer",
+      "required": true,
+      "default": 6
     },
     "type": {
       "type": "enumeration",

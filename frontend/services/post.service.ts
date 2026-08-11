@@ -27,7 +27,7 @@ class PostService {
       "populate=category",
       "populate=tags",
       "populate=cover",
-      "populate=relatedPosts.author.avatar",
+      "populate=relatedPosts.category",
     ].join("&");
 
     const res = await fetch(

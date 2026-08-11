@@ -4,7 +4,7 @@ interface ParagraphProps {
   config: {
     children: Array<any>;
   },
-  options?: { [key: string]: any  };
+  options?: { [key: string]: any };
 }
 
 export const Paragraph = ({ config, options }: ParagraphProps) => {
