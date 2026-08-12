@@ -13,18 +13,25 @@
   "attributes": {
     "title": {
       "type": "string",
-      "minLength": 3
+      "minLength": 3,
+      "required": true
+    },
+    "titleSeo": {
+      "type": "string",
+      "required": true
     },
     "description": {
       "type": "text",
-      "minLength": 10
+      "required": true
     },
     "content": {
       "type": "dynamiczone",
       "components": [
         "collection.article-list",
         "collection.featured-article",
-        "collection.search-bar"
+        "collection.search-bar",
+        "collection.latest-articles",
+        "text.simple-text"
       ],
       "required": true
     }

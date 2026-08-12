@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_collection_category_lists",
+  "info": {
+    "displayName": "category-list"
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "required": true,
+      "default": "Two-by-line",
+      "enum": [
+        "Grid",
+        "Line",
+        "Two-by-line"
+      ]
+    }
+  },
+  "config": {}
+}

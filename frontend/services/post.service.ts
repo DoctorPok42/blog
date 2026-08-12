@@ -1,11 +1,11 @@
 class PostService {
-  private readonly API_URL = process.env.API_URL || "http://localhost:1337";
+  private readonly API_URL = process.env.API_URL || "http://strapi:1337";
   private readonly STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
   async getPosts() {
     const query = [
       "populate=author.avatar",
-      "populate=categories",
+      "populate=category",
       "populate=tags",
     ].join("&");
     const res = await fetch(`${this.API_URL}/api/posts?${query}`, {
@@ -22,8 +22,16 @@ class PostService {
   }
 
   async getPostBySlug(slug: string) {
+    const query = [
+      "populate=author.avatar",
+      "populate=category",
+      "populate=tags",
+      "populate=cover",
+      "populate=relatedPosts.category",
+    ].join("&");
+
     const res = await fetch(
-      `${this.API_URL}/api/posts?filters[slug][$eq]=${slug}&populate=*`,
+      `${this.API_URL}/api/posts?filters[slug][$eq]=${slug}&${query}`,
       {
         headers: {
           Authorization: `Bearer ${this.STRAPI_API_TOKEN}`,

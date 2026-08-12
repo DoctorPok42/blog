@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { meilisearchService } from "../../services/meilisearch.service";
-import ArticleList, { ArticleListType } from "./article-list";
+import { LineByLineArticleList } from "./article-list";
 import { useRouter } from "next/router";
+import Button from "../common/button";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 interface SearchBarProps {
   config: {
@@ -10,10 +12,11 @@ interface SearchBarProps {
   }
 }
 
-const SearchBar = ({ config:{
-    placeholder, textButton
-}}: SearchBarProps) => {
+const SearchBar = ({ config: {
+  placeholder, textButton
+} }: SearchBarProps) => {
   const [searchValue, setSearchValue] = useState<string | null>(null);
+  const [searched, setSearched] = useState<string>("");
   const [results, setResults] = useState<any>(null);
   const searchService = meilisearchService;
   const router = useRouter();
@@ -22,10 +25,11 @@ const SearchBar = ({ config:{
     const decidedSearch = search || searchValue;
     if (decidedSearch) {
       router.push(`/search?q=${encodeURIComponent(decidedSearch)}`, undefined, { shallow: true });
-
-      const results = await searchService.search("post", decidedSearch);
-      setResults(results);
     }
+
+    const results = await searchService.search("post", decidedSearch || "");
+    setResults(results);
+    setSearched(decidedSearch || "");
   }
 
   useEffect(() => {
@@ -38,12 +42,14 @@ const SearchBar = ({ config:{
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 mx-10 my-4">
-      <div className="min-w-1/2 flex gap-2">
+    <div className="max-w-[840px] flex flex-col pt-12 pb-20 px-6 mx-auto">
+      <h1 className="text-[42px] font-heading mb-2 font-medium">Search</h1>
+      <p className="text-neutral-500 mb-7"> Search for posts by title, content, or category.</p>
+      <div className="min-w-1/2 flex md:flex-row flex-col gap-2.5 mb-8">
         <input
           type="text"
           placeholder={placeholder}
-          className="border border-gray-400 rounded-md p-2 w-100 outline-0 text-gray-500 dark:text-gray-200 hover:ring-2 hover:ring-gray-300 focus:ring-2 focus:ring-gray-600 transition placeholder:italic dark:placeholder:gray-400 bg-gray-100 dark:bg-gray-700"
+          className="border border-divider rounded-md py-1.5 px-2.5 w-full outline-none text-neutral-100 hover:border-[#777882] focus:border-accent transition placeholder:italic dark:placeholder:gray-400 bg-surface"
           value={searchValue || ""}
           onChange={(e) => setSearchValue(e.target.value)}
           onKeyDown={(e) => {
@@ -51,31 +57,20 @@ const SearchBar = ({ config:{
           }}
         />
 
-        <button
-          className="bg-gray-600 text-white rounded-md px-4 py-2 font-semibold mr-2 cursor-pointer hover:bg-gray-700 transition"
+        <Button
+          text={textButton}
           onClick={() => handleSearch()}
-        >
-          {textButton}
-        </button>
-
-        {results && (
-          <button
-            className="self-center text-gray-500 underline hover:text-gray-700 dark:text-gray-100 dark:hover:text-gray-400 cursor-pointer transition"
-            onClick={() => {
-              setResults(null);
-              setSearchValue(null);
-            }}
-          >
-            Reset
-          </button>
-        )}
+          icon={faSearch}
+        />
       </div>
 
+      {results && <div className="text-[13px] text-neutral-500 mb-4">
+        {results.length} result{results.length > 1 ? "s" : ""} {searched && "for \"" + searched + "\""}
+      </div>}
+
       {results && (
-        <div className="mt-4 w-full">
-          <ArticleList config={{ title: `Search Results (${results.length})`, type: ArticleListType.LINE }} posts={{
-            data: results || []
-          }} />
+        <div className="w-full">
+          <LineByLineArticleList posts={results} />
         </div>
       )}
     </div>

@@ -1,7 +1,8 @@
-import "@/styles/globals.css";
+import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import App from "next/app";
 import Header from "../../components/layout/header";
+import Footer from "../../components/layout/footer";
 import { dataService } from "../../services/data.service";
 
 interface MyAppProps extends AppProps {
@@ -10,10 +11,11 @@ interface MyAppProps extends AppProps {
 
 function MyApp({ Component, pageProps, headerData }: Readonly<MyAppProps>) {
   return (
-    <>
+    <div>
       <Header nav={headerData.nav} />
       <Component {...pageProps} />
-    </>
+      <Footer />
+    </div>
   );
 }
 

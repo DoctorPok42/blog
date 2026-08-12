@@ -10,7 +10,7 @@ interface TextProps {
   config: {
     text: string;
   } & Partial<Record<Modifier, boolean>>,
-  options?: { [key: string]: any  };
+  options?: { [key: string]: any };
 }
 
 const modifiersComponents: Record<Modifier, React.FC<{ children: React.ReactNode }>> = {
