@@ -40,6 +40,15 @@ jobs:
   build_pr:
     runs-on: self-hosted
     if: github.event_name == 'pull_request'
+    strategy:
+      matrix:
+        include:
+          - name: frontend
+            context: ./frontend
+            image: blog-frontend
+          - name: server
+            context: ./server
+            image: blog-server
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
