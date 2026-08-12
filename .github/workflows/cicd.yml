@@ -34,7 +34,7 @@ jobs:
         with:
           context: ${{ matrix.context }}
           push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/blog:${{ github.sha }}
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/blog:${{ github.sha }}-${{ matrix.image }}
           platforms: linux/amd64
 
   build_pr:
@@ -82,8 +82,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Update ${{ matrix.image }} latest tag
         run: |
-          docker pull ${{ vars.DOCKERHUB_USERNAME }}/blog:${{ github.sha }}
-          docker tag ${{ vars.DOCKERHUB_USERNAME }}/blog:${{ github.sha }} ${{ vars.DOCKERHUB_USERNAME }}/blog:latest-${{ matrix.image }}
+          docker pull ${{ vars.DOCKERHUB_USERNAME }}/blog:${{ github.sha }}-${{ matrix.image }}
+          docker tag ${{ vars.DOCKERHUB_USERNAME }}/blog:${{ github.sha }}-${{ matrix.image }} ${{ vars.DOCKERHUB_USERNAME }}/blog:latest-${{ matrix.image }}
           docker push ${{ vars.DOCKERHUB_USERNAME }}/blog:latest-${{ matrix.image }}
 
   deploy:
