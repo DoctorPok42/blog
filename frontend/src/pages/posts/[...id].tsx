@@ -136,7 +136,7 @@ const PostId = ({ post }: { post: Post }) => {
       </Head>
 
       <div className="max-w-[1180px] mx-auto px-6 pt-8 pb-20 relative flex justify-center gap-12">
-        <div className="pb-12 min-h-screen">
+        <div className="w-full pb-12 min-h-screen">
           <BreadCrumb
             items={[
               { label: post.category.name, href: `/categories?slug=${post.category.slug}` },
@@ -149,9 +149,9 @@ const PostId = ({ post }: { post: Post }) => {
             divClass="inline-flex mb-[14px]"
           />
 
-          <h1 className="text-[clamp(28px,4vw,40px)] font-medium mb-4">{post.title}</h1>
+          <h1 className="text-[clamp(28px,4vw,40px)]! font-medium mb-4">{post.title}</h1>
 
-          <div className="flex items-center justify-between gap-3.5 pb-6 mb-7 border-b border-divider">
+          <div className="flex flex-wrap items-center justify-between gap-3.5 pb-6 mb-7 border-b border-divider">
             <div className="flex gap-2.5 items-center">
               <div className="w-[34px] h-[34px] rounded-full bg-accent-800 flex items-center justify-center text-[13px] text-accent-100">
                 <span>{post.author.name.split(" ").map((n) => n[0]).join("")}</span>
@@ -172,7 +172,7 @@ const PostId = ({ post }: { post: Post }) => {
               </div>
             </div>
 
-            <div className="flex gap-1.5">
+            <div className="flex flex-wrap gap-1.5">
               {post.tags.map((tag: Post["tags"][0], tagIndex: number) => (
                 <Tag
                   key={tagIndex + "-tag"}
@@ -190,9 +190,11 @@ const PostId = ({ post }: { post: Post }) => {
             }} />
           </div>
 
-          {contentWithIds.map((child: { type: string }, index: number) => (
-            <StiComponentRenderer key={index + "-content"} type={child.type} config={child} />
-          ))}
+          <div className="wrap-break-word">
+            {contentWithIds.map((child: { type: string }, index: number) => (
+              <StiComponentRenderer key={index + "-content"} type={child.type} config={child} />
+            ))}
+          </div>
 
           {post.relatedPosts?.length > 0 && (
             <div className="mt-14">
