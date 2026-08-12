@@ -1,9 +1,11 @@
-FROM node:26-alpine
+FROM node:24-alpine
 
 WORKDIR /opt/app
 
+RUN apk add --no-cache python3 make g++ pkgconfig libc6-compat
+
 COPY package*.json ./
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY . .
 
