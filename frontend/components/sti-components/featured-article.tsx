@@ -15,8 +15,8 @@ const FeaturedArticle = ({ config: {
 } }: FeaturedArticleProps) => {
   if (!post) return null;
   return (
-    <div className="mt-10 flex gap-10 items-center justify-start relative">
-      <div className="w-[520px] flex flex-col justify-center items-start">
+    <div className="mt-10 flex md:flex-row flex-col md:gap-10 gap-5 items-center justify-start relative">
+      <div className="max-w-[520px] flex flex-col justify-center items-start">
         <Tag
           text="Featured"
           variant="outline"
@@ -26,7 +26,7 @@ const FeaturedArticle = ({ config: {
         <h1 className="text-[clamp(28px,4vw,44px)] text-text font-heading font-medium mb-3.5 leading-[1.08]">{post?.title}</h1>
         <p className="max-w-[52ch] text-[16px] mb-[22px] font-medium opacity-80">{post?.excerpt}</p>
 
-        <div className="flex items-center gap-3.5 mb-6 text-[13px] text-neutral-500">
+        <div className="flex flex-wrap items-center gap-3.5 mb-6 text-[13px] text-neutral-500">
           <div className="flex items-center gap-2">
             <div className="w-[26px] h-[26px] rounded-full bg-accent-800 flex items-center justify-center text-[11px] text-accent-100">
               <span>{post?.author?.name.split(" ").map((n) => n[0]).join("")}</span>
@@ -52,7 +52,7 @@ const FeaturedArticle = ({ config: {
         />
       </div>
 
-      <div className="w-[572px] rounded-lg overflow-hidden">
+      <div className="max-w-[572px] rounded-lg overflow-hidden">
         <ImageSti config={{
           image: post?.cover,
           clasess: "w-full h-full object-cover rounded-[14px] aspect-[4/3] overflow-hidden",

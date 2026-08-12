@@ -58,7 +58,7 @@ export const TwoByColumnArticleList = ({ posts }: { posts: Post[] }) => {
   return (
     <div className="grid grid-cols-2 gap-4">
       {posts?.map((post: Post, index: number) => (
-        <div key={index + "-post"} className="col-span-1">
+        <div key={index + "-post"} className="md:col-span-1 col-span-2">
           <LineByLineArticleList posts={[post]} />
         </div>
       ))}
@@ -142,7 +142,7 @@ const ArticleList = ({ config: {
   }, [category]);
 
   return (
-    <div className="w-full pt-8 pb-20 sm:px-4">
+    <div className="w-full pt-8 pb-20 px-6 mx-auto">
       <h1 className="text-[42px] font-medium mb-2.5">{title}</h1>
       {postsData?.data?.length === 0 && !loading && <p className="text-neutral-500 mb-7">No posts available.</p>}
       {postsData?.data?.length > 0 && <p className="text-neutral-500 mb-7">{postsData?.meta?.pagination.total} post{postsData?.meta?.pagination.total !== 1 ? "s" : ""}{category && ` — ${categories.find((e) => e.slug === category)?.name}`}</p>}

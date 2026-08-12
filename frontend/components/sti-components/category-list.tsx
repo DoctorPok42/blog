@@ -53,7 +53,7 @@ const CategoryList = ({ config: {
         ]}
       />
 
-      <div className="flex justify-between items-end gap-y-6 gap-x-8 flex-wrap pb-[26px] border-b border-divider">
+      <div className="flex md:flex-row flex-col justify-between md:items-end gap-y-6 gap-x-8 flex-wrap pb-[26px] border-b border-divider">
         <div>
           <h1 className="text-[clamp(30px,4vw,42px)] font-heading leading-[1.05] mb-3 font-medium">{categories.find(e => e.slug === categorySelected)?.name}</h1>
           <p className="text-neutral-400 max-w-[56ch] m-0 text-[15px] leading-[1.6]">{categories.find(e => e.slug === categorySelected)?.description}</p>

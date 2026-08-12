@@ -46,7 +46,7 @@ const Header = ({ nav }: HeaderProps) => {
         <div className="text-lg font-semibold flex gap-2 items-center">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/logo-mark-transparent.svg" alt="Logo" width={24} height={24} />
-            My blog
+            <span className="md:flex hidden">My blog</span>
           </Link>
         </div>
 

@@ -45,7 +45,7 @@ const SearchBar = ({ config: {
     <div className="max-w-[840px] flex flex-col pt-12 pb-20 px-6 mx-auto">
       <h1 className="text-[42px] font-heading mb-2 font-medium">Search</h1>
       <p className="text-neutral-500 mb-7"> Search for posts by title, content, or category.</p>
-      <div className="min-w-1/2 flex gap-2.5 mb-8">
+      <div className="min-w-1/2 flex md:flex-row flex-col gap-2.5 mb-8">
         <input
           type="text"
           placeholder={placeholder}

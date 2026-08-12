@@ -3,7 +3,7 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <div className="border-t border-divider">
-      <div className="max-w-[1180px] mx-auto py-7 px-6 flex items-center justify-between">
+      <div className="max-w-[1180px] mx-auto py-7 px-6 flex md:flex-row flex-col items-center gap-2 justify-between">
         <div className="text-[13px] text-neutral-500">
           <span>© 2026 DoctorPok. All rights reserved.</span>
         </div>
