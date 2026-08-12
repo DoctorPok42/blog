@@ -16,7 +16,6 @@ interface ArticleListProps {
   config: {
     title: string;
     type: ArticleListType;
-    maxItemCol?: number;
   },
 }
 
@@ -76,7 +75,7 @@ export const GridArticleList = ({ posts }: { posts: Post[] }) => {
           <div className="w-full h-full bg-[#2a2c38] rounded-t-md overflow-hidden">
             <ImageSti config={{
               image: post.cover,
-              clasess: "object-cover rounded-t-md aspect-[16/10] overflow-hidden",
+              clasess: "w-full object-cover rounded-t-md aspect-[16/10] overflow-hidden",
             }} />
           </div>
           <div className="p-[18px]">
@@ -108,7 +107,7 @@ export const GridArticleList = ({ posts }: { posts: Post[] }) => {
 }
 
 const ArticleList = ({ config: {
-  title, type, maxItemCol } }: ArticleListProps) => {
+  title, type } }: ArticleListProps) => {
   const [postsData, setPostsData] = useState<{ data: Post[]; meta: { pagination: { page: number; pageCount: number; total: number } } }>({ data: [], meta: { pagination: { page: 1, pageCount: 1, total: 0 } } });
   const [categories, setCategories] = useState<{ name: string, slug: string }[]>([]);
   const [category, setCategory] = useState<string>("");

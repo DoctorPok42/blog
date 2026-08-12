@@ -1,4 +1,5 @@
 import ArticleList from "./article-list";
+import CategoryList from "./category-list";
 import Code from "./code";
 import FeaturedArticle from "./featured-article";
 import Headin from "./heading";
@@ -12,6 +13,7 @@ import { Text } from "./text";
 
 export const stiComponents = {
   "collection.article-list": ArticleList,
+  "collection.category-list": CategoryList,
   code: Code,
   "collection.featured-article": FeaturedArticle,
   image: ImageSti,

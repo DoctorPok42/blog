@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Strapi admin & API — no crawl value, keep out of the index
+Disallow: /admin
+Disallow: /api/
+
+# Search result pages: crawlable but not worth indexing as duplicates
+Disallow: /search?
+
+Sitemap: https://myblog.dev/sitemap.xml

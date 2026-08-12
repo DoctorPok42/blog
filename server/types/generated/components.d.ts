@@ -19,6 +19,18 @@ export interface CollectionArticleList extends Struct.ComponentSchema {
   };
 }
 
+export interface CollectionCategoryList extends Struct.ComponentSchema {
+  collectionName: 'components_collection_category_lists';
+  info: {
+    displayName: 'category-list';
+  };
+  attributes: {
+    type: Schema.Attribute.Enumeration<['Grid', 'Line', 'Two-by-line']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Two-by-line'>;
+  };
+}
+
 export interface CollectionFeaturedArticle extends Struct.ComponentSchema {
   collectionName: 'components_collection_featured_articles';
   info: {
@@ -77,6 +89,7 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'collection.article-list': CollectionArticleList;
+      'collection.category-list': CollectionCategoryList;
       'collection.featured-article': CollectionFeaturedArticle;
       'collection.latest-articles': CollectionLatestArticles;
       'collection.search-bar': CollectionSearchBar;

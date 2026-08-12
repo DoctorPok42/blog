@@ -25,6 +25,15 @@
       "minLength": 3,
       "required": true
     },
+    "description": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true
+    },
     "slug": {
       "type": "uid",
       "pluginOptions": {
@@ -47,9 +56,20 @@
         "collection.search-bar",
         "collection.article-list",
         "collection.latest-articles",
-        "text.simple-text"
+        "text.simple-text",
+        "collection.category-list",
+        "collection.featured-article"
       ],
       "required": false
+    },
+    "titleSeo": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true
     }
   }
 }

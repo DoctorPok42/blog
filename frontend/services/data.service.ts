@@ -80,7 +80,11 @@ class DataService {
   }
 
   async getCategories(): Promise<any> {
-    const resCategories = await fetch(`${this.API_URL}/api/categories`, {
+    const populate = [
+      "populate[posts][populate]=*",
+    ].join("&");
+
+    const resCategories = await fetch(`${this.API_URL}/api/categories?${populate}`, {
       headers: {
         Authorization: `Bearer ${this.STRAPI_API_TOKEN}`,
       },

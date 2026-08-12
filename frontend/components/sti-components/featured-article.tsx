@@ -23,7 +23,7 @@ const FeaturedArticle = ({ config: {
           divClass="mb-[16px]"
         />
 
-        <h1 className="text-[clamp(28px,4vw,44px)] font-heading font-medium mb-3.5 leading-[1.08] text-white">{post?.title}</h1>
+        <h1 className="text-[clamp(28px,4vw,44px)] text-text font-heading font-medium mb-3.5 leading-[1.08]">{post?.title}</h1>
         <p className="max-w-[52ch] text-[16px] mb-[22px] font-medium opacity-80">{post?.excerpt}</p>
 
         <div className="flex items-center gap-3.5 mb-6 text-[13px] text-neutral-500">
