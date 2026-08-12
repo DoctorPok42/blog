@@ -17,7 +17,7 @@ const LatestPost = ({ config: {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch(`/api/posts?page=1&pageSize=${number}&sort=createdAt:desc`);
+        const response = await fetch(`/bff/posts?page=1&pageSize=${number}&sort=createdAt:desc`);
         const data = await response.json();
         setPosts(data.data);
       } catch (error) {

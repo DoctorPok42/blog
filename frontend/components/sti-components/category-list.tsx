@@ -19,7 +19,7 @@ const CategoryList = ({ config: {
 
   useEffect(() => {
     const getCategories = async () => {
-      const fetchCategories = await fetch("/api/categories");
+      const fetchCategories = await fetch("/bff/categories");
       const data = await fetchCategories.json();
       setCategories(data.data);
 

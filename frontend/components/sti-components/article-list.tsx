@@ -118,8 +118,8 @@ const ArticleList = ({ config: {
   const fetchPage = async (targetPage: number) => {
     setLoading(true);
     try {
-      const postRes = await fetch(`/api/posts?page=${targetPage}&pageSize=12&category=${encodeURIComponent(category)}`);
-      const categoryRes = await fetch(`/api/categories`);
+      const postRes = await fetch(`/bff/posts?page=${targetPage}&pageSize=12&category=${encodeURIComponent(category)}`);
+      const categoryRes = await fetch(`/bff/categories`);
       const categoryJson = await categoryRes.json();
       setCategories([{ name: "All", slug: "" }, ...categoryJson.data.map((cat: any) => ({ name: cat.name, slug: cat.slug }))]);
       const json = await postRes.json();
