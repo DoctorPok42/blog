@@ -1,6 +1,6 @@
 import type { GetServerSideProps } from "next";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://myblog.dev";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://blog.doctorpok.io";
 
 type Entry = { loc: string; lastmod?: string; changefreq: string; priority: string };
 

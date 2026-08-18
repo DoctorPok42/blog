@@ -8,4 +8,4 @@ Disallow: /api/
 # Search result pages: crawlable but not worth indexing as duplicates
 Disallow: /search?
 
-Sitemap: https://myblog.dev/sitemap.xml
+Sitemap: https://blog.doctorpok.io/sitemap.xml
