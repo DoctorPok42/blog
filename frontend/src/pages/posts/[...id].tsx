@@ -191,9 +191,11 @@ const PostId = ({ post }: { post: Post }) => {
           </div>
 
           <div className="wrap-break-word">
-            {contentWithIds.map((child: { type: string }, index: number) => (
-              <StiComponentRenderer key={index + "-content"} type={child.type} config={child} />
-            ))}
+            <article>
+              {contentWithIds.map((child: { type: string }, index: number) => (
+                <StiComponentRenderer key={index + "-content"} type={child.type} config={child} />
+              ))}
+            </article>
           </div>
 
           {post.relatedPosts?.length > 0 && (
