@@ -4,10 +4,10 @@ import { StiComponentRenderer } from "../../../components/sti-component-renderer
 import ImageSti from "../../../components/sti-components/image";
 import Link from "next/link";
 import { Post } from "../../../models/post";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../../../components/common/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
+import { faAnglesLeft, faAnglesRight, faArrowRotateLeft, faBarsStaggered, faClose, faGauge, faGaugeSimple, faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
 import Tag from "../../../components/common/tag";
 import Head from "next/head";
 import BreadCrumb from "../../../components/common/breadcrumb";
@@ -59,9 +59,40 @@ const addIdsToContent = (content: any[]): any[] => {
   });
 };
 
+interface SpeedReader {
+  play: boolean,
+  speed: "250" | "350" | "500" | "700",
+  progress: number,
+}
+
+function SpeedReaderWord({ word }: Readonly<{ word: string }>) {
+  if (!word) return null;
+
+  const midIndex = Math.floor((word.length - 1) / 2);
+  const left = word.slice(0, midIndex);
+  const middle = word.charAt(midIndex);
+  const right = word.slice(midIndex + 1);
+
+  return (
+    <div className="flex items-center w-full text-[clamp(24px,5vw,38px)] font-mono tracking-tight text-center">
+      <span className="flex-1 text-right whitespace-pre">{left}</span>
+      <span className="text-accent">{middle}</span>
+      <span className="flex-1 text-left whitespace-pre">{right}</span>
+    </div>
+  );
+}
+
 const PostId = ({ post }: { post: Post }) => {
   const [headings, setHeadings] = useState<Array<{ text: string; id: string }>>([]);
   const [headingSelected, setHeadingSelected] = useState<string | null>(null);
+  const [speedReaderActive, setSpeedReaderActive] = useState<boolean>(false);
+  const [speedReader, setSpeedReader] = useState<SpeedReader>({
+    play: true,
+    speed: "350",
+    progress: 0
+  });
+  const childrenTypeAccepted = new Set(["paragraph"])
+  const speedReaderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (post?.content) {
@@ -80,6 +111,87 @@ const PostId = ({ post }: { post: Post }) => {
   }, [headingSelected]);
 
   const contentWithIds = post?.content ? addIdsToContent(post.content) : [];
+  let content = contentWithIds.filter((child: { type: string }) => childrenTypeAccepted.has(child.type)).map((child: { type: string, children: any[] }, index) => {
+    if (child.type === "paragraph") {
+      return child.children.map((c: any) => {
+        if (c.type === "text") {
+          return c.text;
+        } else if (c.type === "link") {
+          return c.children.map((cc: any) => {
+            if (cc.type === "text") {
+              return cc.text;
+            }
+            return "";
+          }).join("");
+        }
+        return "";
+      }).join(" ");
+    }
+  }).join(" ").trim();
+
+  const words = content.split(" ").length;
+  const interval = 60000 / Number.parseInt(speedReader.speed);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!speedReaderActive) return;
+
+      if (event.key === " " || event.key === "Spacebar") {
+        event.preventDefault();
+        setSpeedReader((prev) => ({ ...prev, play: !prev.play, progress: prev.progress === words - 1 ? 0 : prev.progress }));
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setSpeedReader((prev) => ({ ...prev, progress: Math.min(prev.progress + 10, words - 1) }));
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setSpeedReader((prev) => ({ ...prev, progress: Math.max(prev.progress - 10, 0) }));
+      } else if (event.key === "Escape") {
+        event.preventDefault();
+        setSpeedReaderActive(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [speedReaderActive, words]);
+
+  const startSpeedReader = () => {
+    setSpeedReader({ play: false, speed: speedReader.speed, progress: 0 });
+    setSpeedReaderActive(true);
+    setTimeout(() => {
+      setSpeedReader((prev) => ({ ...prev, play: true }));
+    }, 500);
+  }
+
+  useEffect(() => {
+    if (!speedReaderActive || !speedReader.play) return;
+
+    const timer = setInterval(() => {
+      setSpeedReader((prev) => {
+        if (prev.progress < words - 1) {
+          return { ...prev, progress: prev.progress + 1 };
+        }
+        clearInterval(timer);
+        return { ...prev, play: false };
+      });
+    }, interval);
+
+    return () => clearInterval(timer);
+  }, [speedReaderActive, speedReader.play, speedReader.speed, words]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (speedReaderRef.current && !speedReaderRef.current.contains(event.target as Node)) {
+        setSpeedReaderActive(false);
+      }
+    };
+
+    if (speedReaderActive) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [speedReaderActive]);
 
   if (!post) {
     return (
@@ -135,7 +247,113 @@ const PostId = ({ post }: { post: Post }) => {
         <meta name="twitter:image" content={post.cover?.url} />
       </Head>
 
-      <div className="max-w-[1180px] mx-auto px-6 pt-8 pb-20 relative flex justify-center gap-12">
+      {(speedReaderActive && speedReader) && (
+        <div className="fixed overflow-y-hidden top-0 left-0 w-full min-h-screen max-h-screen bg-black/50 flex justify-center items-center z-1">
+          <div ref={speedReaderRef} className="w-170 border border-divider rounded-2xl bg-surface p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex gap-2 items-center text-accent">
+                <svg data-dc-tpl="141" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path data-dc-tpl="142" d="M4 18a9 9 0 1 1 16 0"></path><path data-dc-tpl="143" d="M12 13.5 16 9"></path></svg>
+                <span className="uppercase tracking-wider text-[11px]">Speed Reader</span>
+              </div>
+
+              <div className="flex items-center justify-center text-[12px] text-neutral-500 gap-2">
+                <span>{post.title}</span>
+
+                <Button
+                  icon={faClose}
+                  onClick={() => setSpeedReaderActive(false)}
+                  variant="secondary"
+                  divClass="px-2! py-2! text-text text-[11.5px]!"
+                />
+              </div>
+            </div>
+
+            <div className="w-full mb-2 py-8 flex flex-col gap-2 border-t border-b border-divider relative select-none">
+              <span className="absolute top-0 left-[50%] h-[9px] w-px bg-accent"></span>
+              <div className="flex flex-col items-center justify-center">
+                <SpeedReaderWord word={content.split(" ")[speedReader.progress || 0]} />
+
+                <span className="text-neutral-500 mt-1 tracking-widest text-[12px]">{content.split(" ").slice(speedReader.progress + 1, (speedReader.progress || 0) + 5).join(" ")}</span>
+              </div>
+              <span className="absolute bottom-0 left-[50%] h-[9px] w-px bg-accent"></span>
+            </div>
+
+            <div className="w-full flex gap-2 mb-4 relative">
+              <div className="w-full h-[3px] bg-neutral-800 rounded-full">
+                <div className={`flex flex-1 h-full bg-accent ${speedReader.progress === words - 1 ? 'rounded-full' : 'rounded-l-full'}`} style={{
+                  width: `${(speedReader.progress / (words - 1)) * 100}%`,
+                  transition: "width 0.1s ease-in-out"
+                }}></div>
+              </div>
+            </div>
+
+            <div className=" w-full flex justify-between pb-4 mb-3 border-b border-divider">
+              <div className="flex gap-2 select-none">
+                <Button
+                  icon={faArrowRotateLeft}
+                  onClick={() => setSpeedReader({ ...speedReader, progress: 0 })}
+                  divClass="text-[11px]! h-10! px-3"
+                  variant="secondary"
+                />
+                <Button
+                  icon={faAnglesLeft}
+                  onClick={() => setSpeedReader({ ...speedReader, progress: Math.max(0, speedReader.progress - 10) })}
+                  divClass="text-[11px]! px-3"
+                  variant="secondary"
+                  disabled={speedReader.progress <= 0}
+                />
+                <Button
+                  text={speedReader.play ? "Pause" : speedReader.progress === words - 1 ? "Replay" : "Resume"}
+                  onClick={() => setSpeedReader({ ...speedReader, play: !speedReader.play, progress: speedReader.progress === words - 1 ? 0 : speedReader.progress })}
+                  divClass="text-[12px]! px-6"
+                  icon={
+                    speedReader.play ? faPause : speedReader.progress === words - 1 ? faArrowRotateLeft : faPlay
+                  }
+                />
+                <Button
+                  icon={faAnglesRight}
+                  onClick={() => setSpeedReader({ ...speedReader, progress: Math.min(speedReader.progress + 10, words - 1) })}
+                  divClass="text-[11px]! px-3"
+                  variant="secondary"
+                  disabled={speedReader.progress >= words - 1}
+                />
+              </div>
+              <div className="flex gap-2 items-center select-none">
+                <span className="text-[12px] text-neutral-500">WPM</span>
+                {
+                  ["250", "350", "500", "700"].map((speed) => (
+                    <Button
+                      key={speed}
+                      text={speed}
+                      divClass="text-[11px]!"
+                      onClick={() => setSpeedReader({ ...speedReader, speed: speed as SpeedReader["speed"] })}
+                      variant={speed === speedReader.speed ? "primary" : "secondary"}
+                    />
+                  ))
+                }
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center text-[12px] text-neutral-500">
+              <div className="flex flex-1">
+                Word {speedReader.progress + 1} of {content.split(" ").length}
+              </div>
+
+              <div className="flex flex-2 justify-center">
+                {Math.ceil(((content.split(" ").length - speedReader.progress - 1) * 6000) / Number.parseInt(speedReader.speed)) * 0.001 < 1 ? "< 1 minute" : `${(Math.ceil(((content.split(" ").length - speedReader.progress - 1) * 6000) / Number.parseInt(speedReader.speed)) * 0.001).toFixed(0)} minute${(Math.ceil(((content.split(" ").length - speedReader.progress - 1) * 6000) / Number.parseInt(speedReader.speed)) * 0.001).toFixed(0) !== "1" ? "s" : ""}`} left at {speedReader.speed} wpm
+              </div>
+
+              <div className="flex flex-2 justify-end">
+                <span>
+                  Space pause · ← → skip · Esc close
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className={`max-w-[1180px] mx-auto px-6 pt-8 pb-20 relative flex justify-center gap-12 ${speedReaderActive && 'blur-xs'} transition duration-150`}>
         <div className="w-full pb-12 min-h-screen">
           <BreadCrumb
             items={[
@@ -180,6 +398,15 @@ const PostId = ({ post }: { post: Post }) => {
                   variant="outline"
                 />
               ))}
+
+              <Button
+                text={`Speed read ${speedReader.speed} wpm`}
+                onClick={startSpeedReader}
+                divClass="text-[11px]! ml-2"
+                svg={
+                  <svg data-dc-tpl="141" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path data-dc-tpl="142" d="M4 18a9 9 0 1 1 16 0"></path><path data-dc-tpl="143" d="M12 13.5 16 9"></path></svg>
+                }
+              />
             </div>
           </div>
 
