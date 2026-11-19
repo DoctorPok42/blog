@@ -26,6 +26,7 @@
     "react-router-dom": "^6.0.0",
     "strapi-plugin-meilisearch": "^0.13.4",
     "strapi-plugin-navigation": "^3.2.6",
+    "strapi-plugin-oidc": "^2.0.4",
     "styled-components": "^6.0.0"
   },
   "devDependencies": {
