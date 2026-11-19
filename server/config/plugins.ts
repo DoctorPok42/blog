@@ -1,4 +1,20 @@
 export default ({ env }) => ({
+  'strapi-plugin-oidc': {
+    enabled: true,
+    config: {
+      OIDC_PUBLIC_URL: env('OIDC_PUBLIC_URL', 'http://localhost:1337'),
+      OIDC_ISSUER: env('OIDC_ISSUER', 'https://auth.doctorpok.io/r/applications'),
+      OIDC_CLIENT_ID: env('OIDC_CLIENT_ID'),
+      OIDC_CLIENT_SECRET: env('OIDC_CLIENT_SECRET'),
+      OIDC_SCOPE: env('OIDC_SCOPE', 'openid profile email'),
+      OIDC_SSO_BUTTON_TEXT: env('OIDC_SSO_BUTTON_TEXT', 'Se connecter avec Oh-My-SSO'),
+      OIDC_ENFORCE: env.bool('OIDC_ENFORCE', false),
+      OIDC_SKIP_LOGIN_PAGE: env.bool('OIDC_SKIP_LOGIN_PAGE', false),
+      OIDC_REQUIRE_EMAIL_VERIFIED: env.bool('OIDC_REQUIRE_EMAIL_VERIFIED', true),
+      REMEMBER_ME: env.bool('REMEMBER_ME', false),
+    },
+  },
+
   email: {
     config: {
       provider: "nodemailer",

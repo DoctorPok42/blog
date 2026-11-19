@@ -86,7 +86,7 @@ export interface TextSimpleText extends Struct.ComponentSchema {
 }
 
 declare module '@strapi/strapi' {
-  export module Public {
+  export namespace Public {
     export interface ComponentSchemas {
       'collection.article-list': CollectionArticleList;
       'collection.category-list': CollectionCategoryList;
